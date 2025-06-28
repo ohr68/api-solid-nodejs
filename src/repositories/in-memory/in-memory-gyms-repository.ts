@@ -7,7 +7,7 @@ import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coor
 export class InMemoryGymsRepository implements GymsRepository {
   public items: Gym[] = []
 
-  async findById(gymId: string): Promise<Gym | null> {
+  async findById(gymId: string) {
     const gym = this.items.find((item) => item.id === gymId)
 
     if (!gym) {
@@ -17,7 +17,7 @@ export class InMemoryGymsRepository implements GymsRepository {
     return gym
   }
 
-  async findManyNearby(params: FindManyNearbyParams): Promise<Gym[]> {
+  async findManyNearby(params: FindManyNearbyParams) {
     return this.items.filter((item) => {
       const distance = getDistanceBetweenCoordinates(
         {
@@ -34,7 +34,7 @@ export class InMemoryGymsRepository implements GymsRepository {
     })
   }
 
-  async searchMany(query: string, page: number): Promise<Gym[]> {
+  async searchMany(query: string, page: number) {
     return this.items
       .filter((item) => item.title.includes(query))
       .slice((page - 1) * 20, page * 20)
