@@ -3,6 +3,8 @@ import { CheckinUseCase } from '@/use-cases/check-in'
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-check-ins-repository'
 import { randomUUID } from 'crypto'
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
+import { MaxNumberOfCheckInsError } from '@/use-cases/errors/max-number-of-check-ins-error'
+import { MaxDistanceError } from '@/use-cases/errors/max-distance-error'
 
 let checkInsRepository: InMemoryCheckInsRepository
 let gymsRepository: InMemoryGymsRepository
@@ -48,17 +50,24 @@ describe('Check-in Use Case', () => {
     vi.setSystemTime(new Date(2025, 5, 27, 8, 0, 0))
 
     const userId = randomUUID()
+    const userLatitude = -20.8605094
+    const userLongitude = -48.2896038
 
     await sut.execute({
       gymId,
       userId,
-      userLatitude: -20.8605094,
-      userLongitude: -48.2896038,
+      userLatitude,
+      userLongitude,
     })
 
     await expect(() =>
-      sut.execute({ gymId, userId, userLatitude: 0, userLongitude: 0 }),
-    ).rejects.toBeInstanceOf(Error)
+      sut.execute({
+        gymId,
+        userId,
+        userLatitude,
+        userLongitude,
+      }),
+    ).rejects.toBeInstanceOf(MaxNumberOfCheckInsError)
   })
 
   it('should be able to check in twice but in different days', async () => {
@@ -93,6 +102,6 @@ describe('Check-in Use Case', () => {
         userLatitude: -20.8805993,
         userLongitude: -48.3074995,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxDistanceError)
   })
 })
