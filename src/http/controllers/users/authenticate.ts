@@ -8,7 +8,6 @@ export async function authenticate(
   reply: FastifyReply,
 ) {
   const authenticateBodySchema = z.object({
-    name: z.string(),
     email: z.string().email(),
     password: z.string().min(6),
   })

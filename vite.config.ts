@@ -19,7 +19,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'e2e',
-          dir: 'src/http/controllers',
+          dir: 'src/tests/controllers',
           environment:
             './prisma/vitest-environment-prisma/prisma-test-environment.ts',
         },
