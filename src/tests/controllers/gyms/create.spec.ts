@@ -4,7 +4,7 @@ import request from 'supertest'
 import dotenv from 'dotenv'
 import { createAndAuthenticateUser } from '@/tests/utils/create-and-authenticate-user'
 
-describe('Profile (e2e)', () => {
+describe('Create Gym (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
 
@@ -15,18 +15,20 @@ describe('Profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get user profile', async () => {
+  it('should be able to create a gym', async () => {
     const { token } = await createAndAuthenticateUser(app)
 
-    const profileResponse = await request(app.server)
-      .get('/me')
+    const createResponse = await request(app.server)
+      .post('/gyms')
       .set('Authorization', `Bearer ${token}`)
+      .send({
+        title: 'Teste',
+        description: 'testando',
+        phone: '11124345335',
+        latitude: -20.8605094,
+        longitude: -48.2896038,
+      })
 
-    expect(profileResponse.statusCode).toEqual(200)
-    expect(profileResponse.body.user).toEqual(
-      expect.objectContaining({
-        email: 'teste@teste.com',
-      }),
-    )
+    expect(createResponse.statusCode).toEqual(201)
   })
 })

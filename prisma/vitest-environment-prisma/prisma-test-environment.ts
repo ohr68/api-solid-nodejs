@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../src/lib/prisma'
 import 'dotenv/config'
 import { execSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
