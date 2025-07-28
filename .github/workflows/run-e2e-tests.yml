@@ -11,17 +11,16 @@ jobs:
        postgres:
         image: postgres:latest
         ports:
-          - "5432:5432"
-        environment:
+          - 5432:5432
+        env:
           POSTGRES_DB: apisolid
           POSTGRES_USER: sa
           POSTGRES_PASSWORD: Senha@123
-        healthcheck:
-          test: [ "CMD", "pg_isready", "-U", "sa", "-d", "apisolid" ]
-          interval: 30s
-          retries: 3
-          start_period: 10s
-          timeout: 10s
+        options: >-
+          --health-cmd="pg_isready -U sa"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v3
@@ -33,5 +32,6 @@ jobs:
       - run: npm ci
       - run: npm run test:e2e
         env:
-          JWT_SECRET: testing
-          DATABASE_URL: "postgresql://docker:docker@localhost:5432/apisolid?schema=public"
+          env:
+            JWT_SECRET: testing
+            DATABASE_URL: "postgresql://sa:Senha@123@localhost:5432/apisolid?schema=public"
