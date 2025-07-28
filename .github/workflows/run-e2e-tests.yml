@@ -12,7 +12,6 @@ jobs:
         image: postgres:latest
         ports:
           - "5432:5432"
-        restart: unless-stopped
         environment:
           POSTGRES_DB: apisolid
           POSTGRES_USER: sa
